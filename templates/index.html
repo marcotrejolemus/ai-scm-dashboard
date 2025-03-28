@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI-Driven SCM Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>AI-Driven Supply Chain Dashboard</h1>
+    <canvas id="demandChart" width="400" height="200"></canvas>
+    <canvas id="inventoryChart" width="400" height="200"></canvas>
+    <canvas id="delayChart" width="400" height="200"></canvas>
+    <script>
+        fetch('/data')
+            .then(response => response.json())
+            .then(data => {
+                const ctx1 = document.getElementById('demandChart').getContext('2d');
+                new Chart(ctx1, {
+                    type: 'line',
+                    data: {
+                        labels: data.dates,
+                        datasets: [{
+                            label: 'Demand (Units)',
+                            data: data.demand,
+                            borderColor: 'blue',
+                            fill: false
+                        }]
+                    },
+                    options: { title: { display: true, text: 'Demand Forecast' } }
+                });
+
+                const ctx2 = document.getElementById('inventoryChart').getContext('2d');
+                new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: data.dates,
+                        datasets: [{
+                            label: 'Inventory (Units)',
+                            data: data.inventory,
+                            backgroundColor: 'green'
+                        }]
+                    },
+                    options: { title: { display: true, text: 'Inventory Levels' } }
+                });
+
+                const ctx3 = document.getElementById('delayChart').getContext('2d');
+                new Chart(ctx3, {
+                    type: 'line',
+                    data: {
+                        labels: data.dates,
+                        datasets: [{
+                            label: 'Shipping Delays (Days)',
+                            data: data.shipping_delays,
+                            borderColor: 'red',
+                            fill: false
+                        }]
+                    },
+                    options: { title: { display: true, text: 'Shipping Delays' } }
+                });
+            });
+    </script>
+</body>
+</html>
