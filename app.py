@@ -36,6 +36,6 @@ def get_data():
 def main():
     print(">>> Starting Flask server...")
     app.run(debug=True)
-
+ 
 if __name__ == "__main__":
     main()
